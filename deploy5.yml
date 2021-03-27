@@ -1,0 +1,35 @@
+---
+- hosts: localhost
+  gather_facts: no
+  vars:
+    vcenter_server: "192.168.21.210"
+    vcenter_user: "administrator@vsphere.local"
+    vcenter_pass: "Fhr.3g92"
+    datacenter_name: "DC1"
+  tasks:
+  - name: Clone the template
+    vmware_guest:
+      hostname: "{{ vcenter_server }}"
+      username: "{{ vcenter_user }}"
+      password: "{{ vcenter_pass }}"
+      validate_certs: False
+      name: web05
+      template: web04
+      datacenter: "{{ datacenter_name }}"
+      folder: /
+      datastore: "datastore01"
+      networks:
+      - name: VM Network
+        ip: 192.168.21.223
+        netmask: 255.255.255.0
+        gateway: 192.168.21.100
+        type: static
+        dns_servers: 8.8.8.8
+      customization:
+        hostname: "web05"
+        dns_servers:
+        - 8.8.8.8
+        - 8.8.4.4
+      state: poweredon
+      wait_for_ip_address: yes
+    delegate_to: localhost
