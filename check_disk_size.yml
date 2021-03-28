@@ -1,0 +1,15 @@
+---
+- hosts: web05
+  become: yes
+  tasks:
+    - block:
+        - parted: device=/dev/sdb unit=MiB
+          register: sdb_info
+        - debug:
+            msg: '{{ sdb_info.disk.size }}'
+        - debug:
+            msg: "{{ sdb_info.disk.size }} greater than 800"
+          when: " sdb_info.disk.size  > 800"
+        - debug:
+            msg: "{{ sdb_info.disk.size }} less than 800"
+          when: " sdb_info.disk.size  < 800"

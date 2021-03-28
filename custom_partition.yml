@@ -1,0 +1,20 @@
+---
+- hosts: web05
+  gather_facts: no
+  vars:
+    vcenter_server: "192.168.21.210"
+    vcenter_user: "administrator@vsphere.local"
+    vcenter_pass: "Fhr.3g92"
+    datacenter_name: "DC1"
+    datacenter: "DC1"
+    name: web05
+  tasks:
+  - name: Creates a volume group 
+    lvg:
+      vg: products_vg
+      pvs: /dev/sdb
+  - name: Create a logical volume of 2GB 
+    lvol:
+      vg: products_vg
+      lv: products_lv
+      size: 2g
