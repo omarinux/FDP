@@ -1,0 +1,30 @@
+---
+- hosts: localhost
+  gather_facts: no
+  vars:
+    vcenter_server: "192.168.21.210"
+    vcenter_user: "administrator@vsphere.local"
+    vcenter_pass: "Fhr.3g92"
+    datacenter_name: "DC1"
+    datacenter: "DC1"
+    name: web05
+  tasks:
+  - name: Add Disk to Guets
+    community.vmware.vmware_guest_disk:
+      hostname: "{{ vcenter_server }}"
+      username: "{{ vcenter_user }}"
+      password: "{{ vcenter_pass }}"
+      datacenter: "DC1"
+      name: web05
+      validate_certs: False
+      disk:
+        - size_gb: 20
+          type: thin
+          datastore: datastore1
+          state: present
+          scsi_type: lsilogic
+          scsi_controller: 0
+          unit_number: 1
+          disk_mode: 'persistent'
+    delegate_to: localhost
+    register: disk_facts
